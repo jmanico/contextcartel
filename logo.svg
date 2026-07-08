@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-labelledby="cc-logo-title">
+  <title id="cc-logo-title">Context Cartel</title>
+
+  <!-- badge -->
+  <rect x="8" y="8" width="184" height="184" rx="42" fill="#0F1629"/>
+  <rect x="20" y="20" width="160" height="160" rx="34" fill="none" stroke="#26314A" stroke-width="2"/>
+
+  <!-- spokes: file to each graph node -->
+  <g stroke="#3A465F" stroke-width="4" stroke-linecap="round">
+    <line x1="100" y1="100" x2="147" y2="66"/>
+    <line x1="100" y1="100" x2="82" y2="45"/>
+    <line x1="100" y1="100" x2="42" y2="100"/>
+    <line x1="100" y1="100" x2="82" y2="155"/>
+    <line x1="100" y1="100" x2="147" y2="134"/>
+  </g>
+
+  <!-- ring: connections between graph nodes (open toward the right) -->
+  <g fill="none" stroke="#3A465F" stroke-width="5" stroke-linecap="round">
+    <path d="M147,66 82,45"/>
+    <path d="M82,45 42,100"/>
+    <path d="M42,100 82,155"/>
+    <path d="M82,155 147,134"/>
+  </g>
+
+  <!-- graph nodes (evidence / concepts) -->
+  <circle cx="147" cy="66" r="14" fill="#F5A623"/>
+  <circle cx="82" cy="45" r="14" fill="#4CC2F1"/>
+  <circle cx="42" cy="100" r="14" fill="#7C5CFC"/>
+  <circle cx="82" cy="155" r="14" fill="#34C795"/>
+  <circle cx="147" cy="134" r="14" fill="#7C5CFC"/>
+
+  <!-- file (source document at the center of the graph) -->
+  <path d="M80,66 H112 L126,80 V128 a6,6 0 0 1 -6,6 H80 a6,6 0 0 1 -6,-6 V72 a6,6 0 0 1 6,-6 Z" fill="#F3ECDD"/>
+  <path d="M112,66 L126,80 H112 Z" fill="#D8CBAA"/>
+</svg>
