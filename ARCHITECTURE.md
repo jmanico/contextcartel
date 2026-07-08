@@ -27,7 +27,7 @@ This document is provisional. REQUIREMENTS.md is the source of truth for what th
 ### Component boundaries
 
 1. **Web admin client (React)** `[GIVEN: Client framework]`
-   - Serves the operator-facing surfaces DESIGN.md lists as component needs: knowledge graph explorer, ingestion panel, crawl source manager, workspace enrollment manager, context filter review queue, announcement feed, activity/audit log.
+   - Serves the operator-facing surfaces enumerated in DESIGN.md's Components section.
    - Must provide a non-visual (text/table) equivalent of the graph explorer per DESIGN.md Accessibility section (FR-9.1/FR-9.3) — `[ASSUMPTION]` this is a rendering concern inside the same client, not a separate service.
    - Consumes the backend via REST or MCP `[GIVEN: API style]` — which of the two (or both, for different consumers) fronts the web admin specifically is `[TBD]`.
 
@@ -38,7 +38,7 @@ This document is provisional. REQUIREMENTS.md is the source of truth for what th
      - An MCP server endpoint for AI engines/agents (FR-4). `[ASSUMPTION]` these are two protocol facades over one shared domain/service layer, not two independently-implemented backends — REQUIREMENTS.md treats "expose graph-backed context through MCP" as one of several ways to reach the same knowledge graph.
    - Exact MCP tools/resources/prompts exposed (FR-4.5) are `[TBD]` per REQUIREMENTS.md Open Questions.
 
-3. **CLI** — DESIGN.md's Platform targets name a CLI alongside MCP server and web; REQUIREMENTS.md's operator-visibility requirements (FR-9) don't specify interface type (FR-9.5 is UNKNOWN). `[ASSUMPTION]` the CLI is a thin client over the same REST/MCP surface as the web admin, not a separate implementation of domain logic.
+3. **CLI** — DESIGN.md's Platform targets name a CLI alongside MCP server and web, resolving REQUIREMENTS.md FR-9.5 (operator interface type = web admin + CLI). `[ASSUMPTION]` the CLI is a thin client over the same REST/MCP surface as the web admin, not a separate implementation of domain logic.
 
 4. **Ingestion subsystem** (FR-2) — accepts operator-supplied files, extracts candidate evidence/concepts, reports import/skip/fail results. Where files are stored/referenced from is `[TBD]` (REQUIREMENTS.md Open Question).
 
@@ -54,7 +54,7 @@ This document is provisional. REQUIREMENTS.md is the source of truth for what th
 
 ### Cross-cutting, explicitly deferred
 
-- **Authentication/session model** is `[GIVEN]`: end users authenticate via passkey; MCP and CLI clients authenticate via OpenAuth. How these two schemes map onto authorization/roles for the actors in REQUIREMENTS.md (operator vs. workspace owner vs. peer store) is `[TBD]` — REQUIREMENTS.md marks authentication/roles as UNKNOWN beyond naming the actors.
+- **Authentication/session model** is `[GIVEN]`: end users authenticate via passkey; MCP and CLI clients authenticate via OpenAuth. How these two schemes map onto authorization/roles for the actors in REQUIREMENTS.md (operator vs. workspace owner vs. peer store) is `[TBD]` — tracked in SECURITY.md Open Questions.
 - **Security expectations** beyond the authentication model above are explicitly `[TBD]` per the human-provided input ("TO BE DECIDED, we will focus on that next").
 - **Deployment model** is `[GIVEN]` as Terraform-managed infrastructure; the specific cloud provider(s), regions, and topology needed to satisfy `[GIVEN: worldwide scale]` are `[TBD]`.
 - **Data classification, retention, privacy/regulatory constraints** are `[TBD]` (REQUIREMENTS.md: UNKNOWN).
@@ -86,5 +86,5 @@ Per instructions, the following are left open rather than guessed: specific data
 - The MCP facade and the REST facade MUST both depend on a shared domain/service layer for graph, ingestion, filtering, enrollment, and announcement logic; MCP-specific and REST-specific code MUST NOT duplicate domain rules (in particular, context-based filtering logic per FR-6.4/FR-7/FR-8.5 MUST be implemented once and reused by both enrollment and announcement-driven import flows).
 - The context-based import filter MUST sit between any external candidate source (ingestion, crawl, enrollment, announcement) and the knowledge graph store — no subsystem may write imported evidence/concepts/links directly into the graph without passing through relevance evaluation, per FR-7.1.
 - The announcement subsystem MUST NOT trigger an automatic import into the knowledge graph store; it MAY only hand off a candidate to the enrollment/import filtering path, gated by import policy (FR-8.7).
-- Authentication MUST be enforced at the API boundary (REST and MCP facades), not deep inside domain logic, so that the two distinct schemes (passkey for users, OpenAuth for MCP/CLI) can be swapped or extended without touching graph/ingestion/crawl/enrollment/announcement logic.
+- The API boundary (REST and MCP facades) is the sole point where domain logic (graph, ingestion, crawl, enrollment, announcement) may be reached from outside the server; this is also where SECURITY.md's authentication-enforcement rule applies, since it is the only place both auth schemes (passkey, OpenAuth) can be checked without leaking into domain code.
 - No component may assume a specific storage, hosting, or messaging technology until those choices are made; domain logic MUST be written against abstractions so the `TO BE DECIDED` items above can be resolved without cascading rewrites.
