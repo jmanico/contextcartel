@@ -7,10 +7,8 @@
 
 ## Project
 
-Context Cartel: a file-based knowledge store that models evidence/concepts as a
-knowledge graph, exposes it to AI engines via MCP, refines it via web crawling,
-and transfers relevant knowledge between enrolled workspaces and peer stores.
-Web + API application. See REQUIREMENTS.md for full scope, actors, and FRs.
+Context Cartel. This file owns agent operating rules only — see REQUIREMENTS.md
+for project purpose, scope, actors, and FRs; ARCHITECTURE.md for how it's built.
 
 ## Repo state
 

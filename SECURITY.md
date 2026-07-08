@@ -27,7 +27,7 @@ Durable defaults, safe to apply regardless of how the items above resolve.
 - Validate every inbound payload (REST body/query/headers, MCP tool arguments) against an explicit schema at the boundary; reject unknown fields rather than stripping them silently.
 
 ### Authentication and Authorization
-- Enforce authentication at the API boundary (REST and MCP facades), never deep in domain logic, per ARCHITECTURE.md's dependency rules — this is what lets passkey and OpenAuth evolve independently.
+- Enforce authentication at the API boundary (REST and MCP facades), never deep in domain logic — this is what lets passkey and OpenAuth evolve independently without touching graph/ingestion/crawl/enrollment/announcement logic (see ARCHITECTURE.md component boundaries).
 - Passkey (WebAuthn/FIDO2) is the given mechanism for end users; do not add a fallback password path without an explicit decision, since it would reintroduce the credential-theft risk passkeys exist to remove.
 - OpenAuth governs MCP/CLI clients; every MCP tool call and CLI-to-API request MUST carry a verifiable identity, not just a static API key.
 - Authorization MUST be deny-by-default and checked server-side on every request; role-to-permission mapping (operator vs. workspace owner vs. AI agent vs. peer store) is `TO BE DECIDED` and MUST be resolved before any multi-tenant or public deployment.
@@ -58,7 +58,7 @@ Durable defaults, safe to apply regardless of how the items above resolve.
 - Apply least-privilege IAM to every resource Terraform provisions; no wildcard resource/action policies.
 - Secrets belong in a secret manager referenced by Terraform, never in `.tfvars` or variable defaults committed to source.
 - Require plan review before apply in CI; run dependency/IaC scanning (e.g., `tfsec`/`checkov`-class tooling) as a CI gate, not a manual step.
-- CI pipelines MUST NOT print secrets to logs and MUST run from pinned, lockfile-verified dependencies (see Dependency Rules below).
+- CI pipelines MUST NOT print secrets to logs and MUST run from pinned, lockfile-verified dependencies (see Third-Party Library Rules below).
 
 ## Selected Prompt Imports
 
@@ -81,7 +81,7 @@ Resolved from ARCHITECTURE.md's given stack; each replaces the matching placehol
 - `{{AUTH_PROMPT}}` → **Partially resolved**: passkey flow is covered (see Selected Prompt Imports); the OpenAuth side of the auth model, and the operator/workspace-owner/peer-store role mapping on top of both mechanisms, are `UNKNOWN`/`TO BE DECIDED`.
 - `{{DEPLOYMENT_PROMPT}}` → **Resolved** (Terraform `[GIVEN]`): see Selected Prompt Imports above.
 
-## Dependency Rules
+## Third-Party Library Rules
 
 - Do not add a dependency when the standard library or a few lines of first-party code will do.
 - Prefer zero new dependencies. If a library is required, justify it in the PR description.

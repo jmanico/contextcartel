@@ -9,8 +9,8 @@
 - `Core workflows: Ingest file-based source material; identify evidence and concepts; link evidence and concepts in a knowledge graph; expose graph-backed context through MCP; crawl web sources to update/refine content; enroll other workspaces into an existing knowledge graph; filter imports for relevance based on context; publish announcements from one knowledge store to other stores; read announcements from other stores to support information transfer.`
 - `Business objects / data entities: Knowledge Store; Knowledge Graph; File; Evidence; Concept; Graph Link/Relationship; Workspace; Workspace Enrollment; Context Filter; Import Candidate; Imported Knowledge; MCP Server Endpoint/Resource; Web Crawl Source; Crawled Content; Announcement; Announcement Reader; Information Transfer.`
 - `External integrations: MCP-compatible AI engines/agents; file storage or file system sources; web crawling targets; other Context Cartel workspaces/knowledge stores participating in enrollment, announcements, and information transfer.`
-- `Authentication / roles: UNKNOWN. The project notes identify administrators/operators, workspace owners/operators, AI engines/agents, and peer knowledge stores as actors, but authentication, authorization, trust model, and role permissions are TO BE DECIDED.`
-- `Regulatory or privacy constraints: UNKNOWN. The project notes imply handling files, crawled content, evidence, concepts, workspace data, and inter-store announcements, but data classification, retention, consent, privacy, and regulatory constraints are TO BE DECIDED.`
+- `Authentication / roles: Authentication mechanism is GIVEN in ARCHITECTURE.md (passkey for end users, OpenAuth for MCP/CLI clients). How these map to permissions for administrators/operators, workspace owners/operators, AI engines/agents, and peer knowledge stores — the authorization/role model and inter-store trust model — is UNKNOWN and TO BE DECIDED; tracked in SECURITY.md.`
+- `Regulatory or privacy constraints: UNKNOWN. The project notes imply handling files, crawled content, evidence, concepts, workspace data, and inter-store announcements, but data classification, retention, consent, privacy, and regulatory constraints are TO BE DECIDED; tracked in SECURITY.md.`
 
 ## Functional Requirements
 
@@ -94,7 +94,7 @@
 - `FR-9.2` Operators MUST be able to see recent ingestion, crawl, enrollment, filtering, announcement, and transfer activity.
 - `FR-9.3` Operators SHOULD be able to inspect why a concept, evidence item, link, or imported item exists in the graph.
 - `FR-9.4` Operators SHOULD be able to remove or disable imported knowledge; exact deletion, tombstone, and provenance behavior is TO BE DECIDED.
-- `FR-9.5` Operator interface type is UNKNOWN.
+- `FR-9.5` Operator interface type is web admin (React) and CLI, per ARCHITECTURE.md's component boundaries and DESIGN.md's Platform targets; detailed screens, commands, and workflows within each are TO BE DECIDED (see DESIGN.md Open Questions).
 
 ## Open Questions
 
@@ -105,14 +105,12 @@
 - What does “fine tune content” mean in product terms: update graph content, refine extracted concepts, tune retrieval behavior, or tune AI models?
 - What MCP tools, resources, prompts, and response schemas must the server expose?
 - Which AI engines/agents are target MCP clients?
-- What authentication and authorization model is required for operators, MCP clients, workspaces, and peer knowledge stores?
-- How is trust established between knowledge stores that exchange announcements or data?
 - Can announcements contain actual data, metadata only, summaries only, or retrieval pointers?
 - What policy determines whether announced data is automatically imported, queued for review, or ignored?
 - How are relevance filters configured, and what threshold is required before importing content?
 - How should the system explain why content was imported or skipped?
 - How are conflicts, duplicates, stale data, and contradictory evidence handled?
 - What web sources may be crawled, and what crawl frequency, robots, consent, and allow/deny rules apply?
-- What privacy, retention, deletion, and regulatory obligations apply to files, crawled content, workspace data, and announcements?
 - What audit history is required for ingestion, graph changes, imports, announcements, and MCP access?
-- What operator interface is required for browsing, reviewing, editing, deleting, and approving graph content?
+
+Security-, trust-, and privacy-related open questions (authorization/role model, inter-store trust, data retention and regulatory scope) are owned by and tracked in SECURITY.md Open Questions, not restated here.
